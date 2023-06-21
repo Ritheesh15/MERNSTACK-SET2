@@ -1,0 +1,38 @@
+import React, { useState } from 'react';
+
+const ColorPicker = () => {
+  const [color, setColor] = useState('#ffffff');
+
+  const handleChange = (event) => {
+    setColor(event.target.value);
+  };
+
+  return (
+    <div>
+      <input
+        type="color"
+        value={color}
+        onChange={handleChange}
+      />
+      <div
+        style={{
+          backgroundColor: color,
+          width: '100px',
+          height: '100px',
+          marginTop: '10px',
+        }}
+      ></div>
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <div>
+      <h1>Color Picker Example</h1>
+      <ColorPicker />
+    </div>
+  );
+};
+
+export default App;
