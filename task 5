@@ -1,0 +1,82 @@
+import React, { useState } from "react";
+
+const AgeCalculator = () => {
+  const [birthDate, setBirthDate] = useState("");
+  const [ageYears, setAgeYears] = useState("");
+  const [ageMonths, setAgeMonths] = useState("");
+  const [ageDays, setAgeDays] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const calculateAge = () => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+
+    if (birthDateObj > today) {
+      setErrorMessage("Please enter a valid date");
+      setAgeYears("");
+      setAgeMonths("");
+      setAgeDays("");
+      return;
+    }
+
+    const yearsDiff = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+    const daysDiff = today.getDate() - birthDateObj.getDate();
+
+    let calculatedAgeYears = yearsDiff;
+    let calculatedAgeMonths = monthDiff;
+    let calculatedAgeDays = daysDiff;
+
+    if (daysDiff < 0) {
+      calculatedAgeMonths--;
+      const daysInPrevMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        0
+      ).getDate();
+      calculatedAgeDays = daysInPrevMonth + daysDiff;
+    }
+
+    if (monthDiff < 0) {
+      calculatedAgeYears--;
+      calculatedAgeMonths = 12 + monthDiff;
+    }
+
+    setAgeYears(calculatedAgeYears.toString());
+    setAgeMonths(calculatedAgeMonths.toString());
+    setAgeDays(calculatedAgeDays.toString());
+    setErrorMessage("");
+  };
+
+  return (
+    <div className="age-calculator-container">
+      <div className="age-calculator-card">
+        <h1 className="age-calculator-title">Age Calculator</h1>
+        <div className="age-calculator-form-group">
+          <label htmlFor="birthDate" className="age-calculator-label">
+            Enter your Date of Birth:
+          </label>
+          <input
+            type="date"
+            id="birthDate"
+            className="age-calculator-input"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+          />
+        </div>
+        <button className="age-calculator-button" onClick={calculateAge}>
+          Calculate Age
+        </button>
+        {errorMessage && <p className="age-calculator-error">{errorMessage}</p>}
+        {ageYears && !errorMessage && (
+          <p className="age-calculator-result">
+            You are {ageYears} years, {ageMonths} months, and {ageDays} days
+            old.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default AgeCalculator;
